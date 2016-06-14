@@ -4,22 +4,23 @@ function BankAccount(firstName, lastName, balance) {
   this.lastName = lastName;
   this.balance = balance;
 }
-function Transfer(balance){
-  if (transferOption === "deposit"){
-   balance += transferAmount;
-  }
-  else if (transferOption === "withdraw"){
-    balance -= transferAmount;
-  }
-  return balance;
-}
 
 function resetFields() {
-    $("input#firstName").val("");
-    $("input#lastName").val("");
-    $("input#new-deposit").val("");
-    $("input#new-transfer").val("");
+    $("input").val("");
 }
+BankAccount.prototype.displayBalance = function()
+{ return this.firstName + " " + this.lastName  + " your balance is " + "$"+ this.balance + ".00";}
+
+BankAccount.prototype.Transfer = function (transferAmount, transferOption) {
+  if (transferOption === "deposit"){
+   newAccount.balance += transferAmount;
+  }
+  else if (transferOption === "withdraw"){
+    newAccount.balance -= transferAmount;
+  }
+  return newAccount.balance;
+}
+
 var newAccount;
 var balance;
 
@@ -31,7 +32,7 @@ $(document).ready(function() {
     var lastName = $("input#lastName").val();
     balance = parseInt($("input#balance").val());
     newAccount = new BankAccount(firstName, lastName, balance);
-    $("#current-balance h3").text("$" + balance + ".00")
+    $("#current-balance h3").text(newAccount.displayBalance());
     $("#new-form").hide();
     $("#transfer-form").show();
     console.log(newAccount);
@@ -41,7 +42,9 @@ $(document).ready(function() {
     event.preventDefault();
     transferAmount = parseInt($("input#transferAmount").val());
     transferOption = $("select#transferOption").val();
-    balance = Transfer(balance);
-    $("#current-balance h3").text("$" + balance + ".00")
+    newAccount.balance = newAccount.Transfer(transferAmount, transferOption);
+    $("#current-balance h3").text(newAccount.displayBalance());
+    resetFields();
+    console.log(newAccount.balance);
   });
 });
